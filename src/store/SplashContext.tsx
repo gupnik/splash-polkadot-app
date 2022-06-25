@@ -4,6 +4,7 @@ import React, { createContext, ReactChild, useContext, useEffect, useState } fro
 // import { canisterId } from "../../../declarations/internet_identity";
 import { CanvasKit } from "canvaskit-wasm";
 import { loadCanvasKit } from "../lib/utils";
+import { useSubstrate } from "../substrate-lib";
 
 export class Shape {
   type: number;
@@ -55,11 +56,16 @@ const splashContext = createContext<SplashContext>({
 })
 
 export function SplashContextProvider({ children }: { children: ReactChild }) {
+  const {
+    setCurrentAccount,
+    state: { keyring, currentAccount },
+  } = useSubstrate()
+
   const [canvasKit, setCanvasKit] = useState<CanvasKit | null>(null);
-  const [isAuthenticated] = useState<boolean>(false);
+  const [isAuthenticated, setAuthenticated] = useState<boolean>(false);
   // const [authClient, setAuthClient] = useState<AuthClient | null>(null);
   // const [actor, setActor] = useState<BackendActor | null>(null);
-  const [projects] = useState<SplashProject[] | null>(null);
+  const [projects, setProjects] = useState<SplashProject[] | null>(null);
   const [currentProject, setCurrentProject] = useState<SplashProject | null>(null);
   const [shapes, setShapes] = useState<Shape[]>([]);
 
@@ -70,19 +76,29 @@ export function SplashContextProvider({ children }: { children: ReactChild }) {
       setCanvasKit(canvasKit);
     }
 
-    const setupActor = async () => {
-      // const authClient = await AuthClient.create();
-      // setAuthClient(authClient);
-      // if (await authClient.isAuthenticated()) {
-      //   onLogin(authClient);
-      // } else {
-      //   setActor(createActor());
-      // }
+    const setupAccount = async () => {
+      // Get the list of accounts we possess the private key for
+      const keyringOptions = keyring && keyring.getPairs().map(account => ({
+        key: account.address,
+        value: account.address,
+        text: account.meta.name.toUpperCase(),
+        icon: 'user',
+      }))
+
+      const initialAddress =
+      keyringOptions && keyringOptions.length > 0 ? keyringOptions[0].value : ''
+      
+      if (!currentAccount &&
+      initialAddress.length > 0) {
+        setCurrentAccount(keyring.getPair(initialAddress))
+        setAuthenticated(true)
+        setProjects([])
+      }
     };
 
     setupCanvasKit();
-    setupActor();
-  }, []);
+    setupAccount();
+  }, [keyring]);
 
   // const onLogin = async () => {
     // const actor = createActor({

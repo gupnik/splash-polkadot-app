@@ -8,15 +8,31 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useSplashContext } from '../store/SplashContext';
+import { BalanceAnnotation } from '../AccountSelector';
+import { Dropdown } from 'semantic-ui-react';
+import { useSubstrate } from '../substrate-lib';
 
 // const pages = ['Projects'];
 // const settings = ['Logout'];
 
+const acctAddr = acct => (acct ? acct.address : '')
+
 const Header = () => {
-  const { isAuthenticated, login, logout, close, currentProject } = useSplashContext();
+  const {
+    setCurrentAccount,
+    state: { keyring, currentAccount },
+  } = useSubstrate()
+
+  const keyringOptions = (keyring && keyring.getPairs().map(account => ({
+    key: account.address,
+    value: account.address,
+    text: account.meta.name.toUpperCase(),
+    icon: 'user',
+  }))) || []
+
+  const { close, currentProject } = useSplashContext();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   // const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -148,10 +164,10 @@ const Header = () => {
             ))} */}
           </Box>
 
-        {isAuthenticated ?
-          <MenuItem key={"Logout"} onClick={logout}>
-            <Typography textAlign="center">{"Logout"}</Typography>
-          </MenuItem>
+         {//isAuthenticated ?
+          // <MenuItem key={"Logout"} onClick={logout}>
+          //   <Typography textAlign="center">{"Logout"}</Typography>
+          // </MenuItem>
           // <Box sx={{ flexGrow: 0 }}>
           //   <Tooltip title="Open settings">
           //     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -181,11 +197,24 @@ const Header = () => {
           //     ))}
           //   </Menu>
           // </Box>
-          : 
-          <MenuItem key={"Login"} onClick={login}>
-            <Typography textAlign="center">{"Login"}</Typography>
-          </MenuItem>
-        }   
+        //   : 
+        //   <MenuItem key={"Login"} onClick={login}>
+        //     <Typography textAlign="center">{"Login"}</Typography>
+        //   </MenuItem>
+        //
+       }   
+        <Dropdown
+            search
+            selection
+            clearable
+            placeholder="Select an account"
+            options={keyringOptions}
+            onChange={(_, dropdown) => {
+              setCurrentAccount(keyring.getPair(dropdown.value))
+            }}
+            value={acctAddr(currentAccount)}
+          />
+        <BalanceAnnotation />
         </Toolbar>
       </Container>
     </AppBar>

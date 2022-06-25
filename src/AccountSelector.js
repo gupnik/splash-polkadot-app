@@ -108,7 +108,7 @@ function Main(props) {
   )
 }
 
-function BalanceAnnotation(props) {
+export function BalanceAnnotation(props) {
   const { api, currentAccount } = useSubstrateState()
   const [accountBalance, setAccountBalance] = useState(0)
 

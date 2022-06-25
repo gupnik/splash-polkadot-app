@@ -1,5 +1,5 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import React from "react"
+import React, { useEffect } from "react"
 
 import { useSplashContext } from "../store/SplashContext.tsx";
 import Header from "./Header.tsx";
@@ -8,6 +8,10 @@ import { Projects } from "./Projects.tsx";
 
 export const Home = () => {
     const { currentProject, isAuthenticated, login } = useSplashContext();
+
+    useEffect(() => {
+      // console.log(isAuthenticated)
+    }, [isAuthenticated])
 
   return (
     <div style={{ display: "flex", flexDirection: "column", flex: 1 }}  height={"100vh"}>
