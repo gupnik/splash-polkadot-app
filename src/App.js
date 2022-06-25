@@ -22,6 +22,7 @@ import NodeInfo from './NodeInfo'
 import TemplateModule from './TemplateModule'
 import Transfer from './Transfer'
 import Upgrade from './Upgrade'
+import { Home } from './components/Home.jsx'
 
 function Main() {
   const { apiState, apiError, keyringState } = useSubstrateState()
@@ -64,6 +65,9 @@ function Main() {
       </Sticky>
       <Container>
         <Grid stackable columns="equal">
+          <Grid.Row>
+            <Home />
+          </Grid.Row>
           <Grid.Row stretched>
             <NodeInfo />
             <Metadata />

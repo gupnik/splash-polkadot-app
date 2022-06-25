@@ -25,6 +25,10 @@
     "deploy": "gh-pages -d build -m '[ci skip] Updates'"
   },
   "dependencies": {
+    "@emotion/react": "^11.9.3",
+    "@emotion/styled": "^11.9.3",
+    "@mui/icons-material": "^5.8.4",
+    "@mui/material": "^5.8.4",
     "@polkadot/api": "^7.10.1",
     "@polkadot/extension-dapp": "^0.42.7",
     "@polkadot/keyring": "^8.4.1",
@@ -34,6 +38,7 @@
     "@polkadot/ui-settings": "^1.1.1",
     "@polkadot/util": "^8.4.1",
     "@polkadot/util-crypto": "^8.4.1",
+    "canvaskit-wasm": "^0.34.1",
     "node-polyfill-webpack-plugin": "^1.1.4",
     "prop-types": "^15.8.1",
     "react": "^17.0.2",
@@ -51,7 +56,8 @@
     "gh-pages": "^3.2.3",
     "prettier": "2.5.1",
     "react-app-rewired": "^2.2.1",
-    "semistandard": "^16.0.1"
+    "semistandard": "^16.0.1",
+    "typescript": "^4.7.4"
   },
   "resolutions": {
     "eslint-plugin-jsx-a11y": "6.5.1"
